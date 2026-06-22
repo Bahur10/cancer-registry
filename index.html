@@ -2,69 +2,56 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>سجل السرطان - صبراتة</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مكتب سجل السرطان - صبراتة</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: Tahoma, sans-serif; padding: 20px; background-color: #f4f4f9; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #333; }
-        label { display: block; margin-top: 10px; font-weight: bold; }
-        input { width: 100%; padding: 10px; margin: 5px 0 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        body { font-family: Tahoma, sans-serif; background: #f4f4f9; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; font-size: 1.5rem; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #34495e; }
+        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1.1rem; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>إضافة بيانات مريض جديد</h2>
+        <h1>مكتب سجل السرطان</h1>
         <form id="patientForm">
-            <label>رقم الملف</label><input type="text" id="file_number" required>
-            <label>السنة</label><input type="number" id="year">
-            <label>الاسم الثلاثي</label><input type="text" id="full_name">
-            <label>المنطقة</label><input type="text" id="region">
-            <label>كود المحلة</label><input type="text" id="locality_code">
-            <label>العمر</label><input type="number" id="age">
-            <label>تاريخ التشخيص</label><input type="date" id="diagnosis_date">
-            <label>نوع الورم</label><input type="text" id="tumor_type">
-            <label>مكان الورم</label><input type="text" id="tumor_site">
-            <label>سلوك الورم</label><input type="text" id="tumor_behavior">
-            <label>التشخيص</label><input type="text" id="diagnosis">
-            <label>المتابعة</label><input type="text" id="follow_up">
-            <button type="submit" id="saveBtn">حفظ البيانات في السجل</button>
+            <div class="form-group"><label>رقم الملف (File No)</label><input type="text" id="file_no" required></div>
+            <div class="form-group"><label>سنة التسجيل</label><input type="number" id="registration_year"></div>
+            <div class="form-group"><label>الاسم الكامل</label><input type="text" id="patient_name"></div>
+            <div class="form-group"><label>الاسم بالعربي</label><input type="text" id="name_in_arabic"></div>
+            <div class="form-group"><label>الرقم الوطني</label><input type="text" id="national_number"></div>
+            <div class="form-group"><label>البلدية</label><input type="text" id="municipality"></div>
+            <div class="form-group"><label>العمر</label><input type="number" id="age"></div>
+            <div class="form-group"><label>الجنس</label><input type="text" id="sex"></div>
+            <div class="form-group"><label>الموقع الأولي للورم</label><input type="text" id="primary_site"></div>
+            <div class="form-group"><label>تاريخ حدوث الإصابة</label><input type="date" id="date_of_incidence"></div>
+            <button type="submit" id="saveBtn">حفظ البيانات</button>
         </form>
     </div>
 
     <script>
-        // إعدادات الاتصال بقاعدة البيانات
-        const supabaseUrl = 'https://syjmrfwcbflpgijahws.supabase.co';
-        const supabaseKey = 'sb_publishable_ROZDYlof6ewGr-6y_9R_pQ_U8rptzVL';
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        const supabase = supabase.createClient('https://syjmrfwcbflpgijahws.supabase.co', 'sb_publishable_ROZDYlof6ewGr-6y_9R_pQ_U8rptzVL');
 
         document.getElementById('patientForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            document.getElementById('saveBtn').innerText = "جاري الحفظ...";
-
             const { error } = await supabase.from('patients').insert([{
-                file_number: document.getElementById('file_number').value,
-                year: document.getElementById('year').value,
-                full_name: document.getElementById('full_name').value,
-                region: document.getElementById('region').value,
-                locality_code: document.getElementById('locality_code').value,
+                file_no: document.getElementById('file_no').value,
+                registration_year: document.getElementById('registration_year').value,
+                patient_name: document.getElementById('patient_name').value,
+                name_in_arabic: document.getElementById('name_in_arabic').value,
+                national_number: document.getElementById('national_number').value,
+                municipality: document.getElementById('municipality').value,
                 age: document.getElementById('age').value,
-                diagnosis_date: document.getElementById('diagnosis_date').value,
-                tumor_type: document.getElementById('tumor_type').value,
-                tumor_site: document.getElementById('tumor_site').value,
-                tumor_behavior: document.getElementById('tumor_behavior').value,
-                diagnosis: document.getElementById('diagnosis').value,
-                follow_up: document.getElementById('follow_up').value
+                sex: document.getElementById('sex').value,
+                primary_site: document.getElementById('primary_site').value,
+                date_of_incidence: document.getElementById('date_of_incidence').value
             }]);
-
-            if (error) {
-                alert('حدث خطأ أثناء الحفظ: ' + error.message);
-            } else {
-                alert('تم حفظ بيانات المريض بنجاح!');
-                document.getElementById('patientForm').reset();
-            }
-            document.getElementById('saveBtn').innerText = "حفظ البيانات في السجل";
+            if (error) alert('خطأ: ' + error.message);
+            else { alert('تم الحفظ بنجاح!'); document.getElementById('patientForm').reset(); }
         });
     </script>
 </body>
