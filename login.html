@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>تسجيل الدخول - سجل السرطان</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: Tahoma; background: #f4f4f9; padding: 50px; text-align: center; }
+        .login-box { max-width: 400px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2>تسجيل الدخول</h2>
+        <input type="email" id="email" placeholder="البريد الإلكتروني">
+        <input type="password" id="password" placeholder="كلمة السر">
+        <button onclick="login()">دخول</button>
+    </div>
+
+    <script>
+        const supabase = supabase.createClient('https://syjmrfwcbflpgijahws.supabase.co', 'sb_publishable_ROZDYlof6ewGr-6y_9R_pQ_U8rptzVL');
+
+        async function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+            if (error) alert('خطأ في الدخول: ' + error.message);
+            else window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
