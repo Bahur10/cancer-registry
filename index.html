@@ -36,6 +36,32 @@
     <script>
         const supabase = supabase.createClient('https://syjmrfwcbflpgijahws.supabase.co', 'sb_publishable_ROZDYlof6ewGr-6y_9R_pQ_U8rptzVL');
 
+        // الحماية: التحقق من تسجيل الدخول
+        supabase.auth.getSession().then(({ data }) => {
+            if (!data.session) window.location.href = 'login.html';
+        });
+
+        document.getElementById('patientForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const { error } = await supabase.from('patients').insert([{
+                file_no: document.getElementById('file_no').value,
+                registration_year: document.getElementById('registration_year').value,
+                patient_name: document.getElementById('patient_name').value,
+                name_in_arabic: document.getElementById('name_in_arabic').value,
+                national_number: document.getElementById('national_number').value,
+                municipality: document.getElementById('municipality').value,
+                age: document.getElementById('age').value,
+                sex: document.getElementById('sex').value,
+                primary_site: document.getElementById('primary_site').value,
+                date_of_incidence: document.getElementById('date_of_incidence').value
+            }]);
+            if (error) alert('خطأ: ' + error.message);
+            else { alert('تم الحفظ بنجاح!'); document.getElementById('patientForm').reset(); }
+        });
+    </script>
+</body>
+</html>        const supabase = supabase.createClient('https://syjmrfwcbflpgijahws.supabase.co', 'sb_publishable_ROZDYlof6ewGr-6y_9R_pQ_U8rptzVL');
+
         document.getElementById('patientForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const { error } = await supabase.from('patients').insert([{
