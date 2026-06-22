@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>سجل السرطان - صبراتة</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f4f4f9; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 8px; }
+        input, textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background: #28a745; color: white; padding: 10px; width: 100%; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>إضافة حالة جديدة</h2>
+        <form id="patientForm">
+            <input type="text" id="fullName" placeholder="اسم المريض الثلاثي" required>
+            <input type="text" id="nationalId" placeholder="الرقم الوطني" required>
+            <input type="date" id="birthDate">
+            <input type="text" id="municipality" placeholder="البلدية">
+            <textarea id="description" placeholder="ملاحظات طبية"></textarea>
+            <button type="submit">حفظ البيانات</button>
+        </form>
+    </div>
+</body>
+</html>
