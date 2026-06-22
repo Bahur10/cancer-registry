@@ -1,0 +1,17 @@
+<div id="stats">
+    <h3>إحصائيات السجل</h3>
+    <p>إجمالي الحالات المسجلة: <span id="totalCases">0</span></p>
+    <div id="byMunicipality"></div>
+</div>
+
+<script>
+    // استخدام Supabase لجلب البيانات
+    async function loadStats() {
+        const { data, error } = await supabase.from('patients').select('*');
+        if (data) {
+            document.getElementById('totalCases').innerText = data.length;
+            // يمكنك هنا إضافة كود لترتيب وعرض البيانات حسب البلدية
+        }
+    }
+    loadStats();
+</script>
