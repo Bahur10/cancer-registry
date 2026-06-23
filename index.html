@@ -3,12 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مكتب سجل السرطان - صبراتة</title>
+    <title>منظومة سجل السرطان - صبراتة</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: Tahoma, sans-serif; background: #f4f4f9; padding: 20px; }
+        body { font-family: Tahoma, sans-serif; background: #f4f4f9; padding: 10px; }
         .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #2c3e50; font-size: 1.5rem; }
+        
+        /* تنسيق الهيدر الرسمي */
+        .header-box { text-align: center; background: #2c3e50; color: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
+        .header-box h1 { font-size: 1.2rem; margin: 0; color: #ffffff; }
+        .header-box h2 { font-size: 1rem; margin: 5px 0; color: #bdc3c7; }
+        .header-box p { font-size: 0.9rem; margin: 5px 0; font-weight: bold; }
+        
         .form-group { margin-bottom: 15px; }
         label { display: block; font-weight: bold; margin-bottom: 5px; color: #34495e; }
         input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
@@ -17,7 +23,14 @@
 </head>
 <body>
     <div class="container">
-        <h1>مكتب سجل السرطان</h1>
+        <!-- الهيدر المضاف -->
+        <div class="header-box">
+            <h1>المعهد القومي لعلاج الأورام - صبراتة</h1>
+            <h2>مكتب سجل السرطان</h2>
+            <p>أ. خالد النويلي ......... أ. محمد بحور</p>
+            <p style="color: #f1c40f;">منظومة تجريبية لإدخال بيانات مرضى السرطان</p>
+        </div>
+
         <form id="patientForm">
             <div class="form-group"><label>رقم الملف (File No)</label><input type="text" id="file_no" required></div>
             <div class="form-group"><label>سنة التسجيل</label><input type="number" id="registration_year"></div>
@@ -42,6 +55,8 @@
 
         document.getElementById('patientForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const { data: { user } } = await supabase.auth.getUser();
+            
             const { error } = await supabase.from('patients').insert([{
                 file_no: document.getElementById('file_no').value,
                 registration_year: document.getElementById('registration_year').value,
@@ -52,8 +67,10 @@
                 age: document.getElementById('age').value,
                 sex: document.getElementById('sex').value,
                 primary_site: document.getElementById('primary_site').value,
-                date_of_incidence: document.getElementById('date_of_incidence').value
+                date_of_incidence: document.getElementById('date_of_incidence').value,
+                user_email: user.email 
             }]);
+            
             if (error) alert('خطأ: ' + error.message);
             else { alert('تم الحفظ بنجاح!'); document.getElementById('patientForm').reset(); }
         });
