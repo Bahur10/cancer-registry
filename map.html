@@ -1,1 +1,78 @@
+DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>سجل السرطان - خريطة التوزيع</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f4f7f6; margin: 0; padding: 10px; }
+        .container { max-width: 1000px; margin: auto; background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; }
+        #map { height: 75vh; width: 100%; margin-top: 15px; border-radius: 15px; border: 2px solid #ddd; }
+        h1 { color: #2c3e50; margin: 0 0 10px 0; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>سجل السرطان - خريطة التوزيع</h1>
+    <input type="file" id="csvFile" accept=".csv" />
+</div>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+
+<script>
+    // تهيئة الخريطة مع تفعيل أزرار التكبير والتصغير (zoomControl: true)
+    var map = L.map('map', {
+        zoomControl: true 
+    }).setView([32.78, 12.38], 9);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        minZoom: 5
+    }).addTo(map);
+
+    var markers = L.markerClusterGroup();
+    map.addLayer(markers);
+
+    var cityCoords = {
+        "sabratha": [32.78, 12.38], "صبراتة": [32.78, 12.38],
+        "zawia": [32.75, 12.72], "الزاوية": [32.75, 12.72],
+        "tripoli": [32.88, 13.19], "طرابلس": [32.88, 13.19],
+        "zwara": [32.92, 12.08], "زوارة": [32.92, 12.08],
+        "surman": [32.76, 12.47], "صرمان": [32.76, 12.47],
+        "gharian": [32.17, 12.32], "غريان": [32.17, 12.32],
+        "regdalin": [32.71, 11.83], "رقدالين": [32.71, 11.83],
+        "janzur": [32.81, 13.06], "جنزور": [32.81, 13.06],
+        "jamil": [32.77, 11.96], "الجميل": [32.77, 11.96],
+        "kikla": [32.15, 12.18], "ككلة": [32.15, 12.18],
+        "alharsha": [32.77, 12.65], "الحرشة": [32.77, 12.65],
+        "yefrin": [32.06, 12.52], "يفرن": [32.06, 12.52],
+        "aljosh": [32.00, 12.10], "الجوش": [32.00, 12.10]
+    };
+
+    document.getElementById('csvFile').addEventListener('change', function(e) {
+        var file = e.target.files[0];
+        Papa.parse(file, {
+            header: true,
+            complete: function(results) {
+                markers.clearLayers();
+                results.data.forEach(function(row) {
+                    var city = row.Municipality ? row.Municipality.toString().toLowerCase().trim() : "";
+                    if (cityCoords[city]) {
+                        markers.addLayer(L.marker(cityCoords[city]).bindPopup("المدينة: " + row.Municipality));
+                    }
+                });
+                map.addLayer(markers);
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
 
